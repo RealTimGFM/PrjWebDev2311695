@@ -1,8 +1,94 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+
+    decimal amount = 27.99M;
+    DateTime temp = new DateTime(2025, 10, 28);
+    string due = temp.Year + "/" + temp.Month + "/" + temp.Day;
+    string city = "Montreal";
+    string[] items = new string[5];
+
+    items[0] = "Iphone X";
+    items[1] = "Iphone 11";
+    items[2] = "Iphone 12";
+    items[3] = "Iphone 13";
+    items[4] = "Iphone 14";
+
+    bool listCount4 = false;
+    if (items.Length >= 4)
+    {
+        listCount4 = true;
+    }
+    string msg = "";
+    switch (city)
+    {
+        case "Montreal":
+            msg = "You live in " + city + ". Please bring " + amount + "$ before " + due;
+            break;
+
+        case "Quebec":
+            msg = "Please bring " + amount + "$ before " + due;
+            break;
+
+        default:
+            msg = "Welcome from " + city;
+            break;
+    }
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="box">
+    <h1>DA IP STORE</h1>
+    <p>Me buy Iphone, me sell Iphone, same price, no discount.</p>
+
+    <img src="./images/logo.png" alt="Logo" style="max-width:160px; display:block; margin:8px 0;" />
+
+    <h3>My phones</h3>
+    <table>
+        <thead>
+            <tr><th>Iphones</th></tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < items.Length; i++)
+            {
+                <tr><td>@items[i]</td></tr>
+            }
+        </tbody>
+    </table>
+    <p>
+        Status:
+        @if (listCount4)
+        {
+            <img class="thumb" src="./images/like.png" alt="thumb up" />
+        }
+        else
+        {
+            <img class="thumb" src="./images/dislike.png" alt="thumb down" />
+        }
+    </p>
+
+    <div class="center"><strong>@msg</strong></div>
 </div>
+
+<style>
+    h1 {
+        color: red;
+    }
+
+    .box {
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    img.thumb {
+        height: 22px;
+        vertical-align: middle;
+    }
+</style>
