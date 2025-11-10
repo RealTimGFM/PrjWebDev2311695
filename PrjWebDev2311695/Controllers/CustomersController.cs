@@ -22,7 +22,10 @@ namespace PrjWebDev2311695.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            var list = await _context.Customer
+                .Include(c => c.City)
+                .ToListAsync();
+            return View(list);
         }
 
         // GET: Customers/Details/5
@@ -34,6 +37,7 @@ namespace PrjWebDev2311695.Controllers
             }
 
             var customer = await _context.Customer
+                .Include(c => c.City)
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
