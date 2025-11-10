@@ -15,6 +15,8 @@ public partial class Prj2311695Context : DbContext
     {
     }
 
+    public virtual DbSet<City> Cities { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -27,6 +29,17 @@ public partial class Prj2311695Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.HasKey(e => e.CityId).HasName("PK__City__F2D21A96242ACA87");
+
+            entity.ToTable("City");
+
+            entity.Property(e => e.CityId).HasColumnName("CityID");
+            entity.Property(e => e.CityName).HasMaxLength(60);
+            entity.Property(e => e.Province).HasMaxLength(60);
+        });
+
         modelBuilder.Entity<Customer>(entity =>
         {
             entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B839FA4209");
@@ -35,11 +48,13 @@ public partial class Prj2311695Context : DbContext
 
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.AddressLine).HasMaxLength(120);
-            entity.Property(e => e.City).HasMaxLength(60);
             entity.Property(e => e.CreditCard)
                 .HasMaxLength(16)
                 .IsUnicode(false)
                 .IsFixedLength();
+            entity.Property(e => e.Email)
+                .HasMaxLength(120)
+                .HasDefaultValue("exp@exp.exp");
             entity.Property(e => e.FirstName).HasMaxLength(50);
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Phone)
@@ -48,6 +63,11 @@ public partial class Prj2311695Context : DbContext
             entity.Property(e => e.PostalCode)
                 .HasMaxLength(7)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.City).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.CityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Customer_City");
         });
 
         modelBuilder.Entity<Product>(entity =>

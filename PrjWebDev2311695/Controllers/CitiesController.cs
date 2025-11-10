@@ -10,22 +10,22 @@ using PrjWebDev2311695.Models;
 
 namespace PrjWebDev2311695.Controllers
 {
-    public class CustomersController : Controller
+    public class CitiesController : Controller
     {
         private readonly PrjWebDev2311695Context _context;
 
-        public CustomersController(PrjWebDev2311695Context context)
+        public CitiesController(PrjWebDev2311695Context context)
         {
             _context = context;
         }
 
-        // GET: Customers
+        // GET: Cities
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            return View(await _context.City.ToListAsync());
         }
 
-        // GET: Customers/Details/5
+        // GET: Cities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +33,39 @@ namespace PrjWebDev2311695.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
+            var city = await _context.City
+                .FirstOrDefaultAsync(m => m.CityId == id);
+            if (city == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(city);
         }
 
-        // GET: Customers/Create
+        // GET: Cities/Create
         public IActionResult Create()
         {
-            ViewData["CityId"] = new SelectList(_context.City.OrderBy(c => c.CityName), "CityId", "CityName");
             return View();
         }
 
-        // POST: Customers/Create
+        // POST: Cities/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Email,AddressLine,CityId,PostalCode,Phone,CreditCard")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CityId,CityName,Province")] City city)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                _context.Add(city);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.City.OrderBy(c => c.CityName), "CityId", "CityName", customer.CityId);
-            return View(customer);
+            return View(city);
         }
 
-        // GET: Customers/Edit/5
+        // GET: Cities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,23 +73,22 @@ namespace PrjWebDev2311695.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer == null)
+            var city = await _context.City.FindAsync(id);
+            if (city == null)
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.City.OrderBy(c => c.CityName), "CityId", "CityName", customer.CityId);
-            return View(customer);
+            return View(city);
         }
 
-        // POST: Customers/Edit/5
+        // POST: Cities/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Email,AddressLine,CityId,PostalCode,Phone,CreditCard")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CityId,CityName,Province")] City city)
         {
-            if (id != customer.CustomerId)
+            if (id != city.CityId)
             {
                 return NotFound();
             }
@@ -100,12 +97,12 @@ namespace PrjWebDev2311695.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
+                    _context.Update(city);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.CustomerId))
+                    if (!CityExists(city.CityId))
                     {
                         return NotFound();
                     }
@@ -116,12 +113,10 @@ namespace PrjWebDev2311695.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.City.OrderBy(c => c.CityName), "CityId", "CityName", customer.CityId);
-
-            return View(customer);
+            return View(city);
         }
 
-        // GET: Customers/Delete/5
+        // GET: Cities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,35 +124,34 @@ namespace PrjWebDev2311695.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
-                .Include(c => c.City)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
+            var city = await _context.City
+                .FirstOrDefaultAsync(m => m.CityId == id);
+            if (city == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(city);
         }
 
-        // POST: Customers/Delete/5
+        // POST: Cities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer != null)
+            var city = await _context.City.FindAsync(id);
+            if (city != null)
             {
-                _context.Customer.Remove(customer);
+                _context.City.Remove(city);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int id)
+        private bool CityExists(int id)
         {
-            return _context.Customer.Any(e => e.CustomerId == id);
+            return _context.City.Any(e => e.CityId == id);
         }
     }
 }

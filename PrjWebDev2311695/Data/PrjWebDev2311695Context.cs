@@ -17,5 +17,6 @@ namespace PrjWebDev2311695.Data
         public DbSet<PrjWebDev2311695.Models.Customer> Customer { get; set; } = default!;
         public DbSet<PrjWebDev2311695.Models.Product> Product { get; set; } = default!;
         public DbSet<PrjWebDev2311695.Models.Sale> Sale { get; set; } = default!;
+        public DbSet<PrjWebDev2311695.Models.City> City { get; set; } = default!;
     }
 }
