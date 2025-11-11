@@ -153,5 +153,51 @@ namespace PrjWebDev2311695.Controllers
         {
             return _context.City.Any(e => e.CityId == id);
         }
+
+        public async Task<IActionResult> Search(string? city, string? province)
+        {
+            // Retrieve all cities from the database
+            var all = await _context.City.ToListAsync();
+            string c = (city ?? "").ToLower();
+            string p = (province ?? "").ToLower();
+            List<City> result = new List<City>();
+
+            foreach (var item in all)
+            {
+                string name = (item.CityName ?? "").ToLower();
+                string prov = (item.Province ?? "").ToLower();
+
+                bool match = true;
+                //if the city box is empty, check stuff inside province box to see matches
+                //and reverse
+                //if both boxes have stuff, check both for matches city and provice
+                if (c != "")
+                {
+                    if (!name.Contains(c))
+                    {
+                        match = false;
+                    }
+                }
+
+                if (p != "")
+                {
+                    if (!prov.Contains(p))
+                    {
+                        match = false;
+                    }
+                }
+
+                if (match)
+                {
+                    result.Add(item);
+                }
+            }
+            //keep track of what savved where. 
+            ViewBag.City = city;
+            ViewBag.Province = province;
+
+            return View(result);
+        }
+
     }
 }

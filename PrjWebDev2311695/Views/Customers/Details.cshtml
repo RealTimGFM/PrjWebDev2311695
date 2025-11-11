@@ -23,10 +23,10 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            Email
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class="col-sm-10">
-            @Model.Email
+            @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AddressLine)
@@ -35,10 +35,10 @@
             @Html.DisplayFor(model => model.AddressLine)
         </dd>
         <dt class="col-sm-2">
-            City
+            @Html.DisplayNameFor(model => model.City.CityName)
         </dt>
         <dd class="col-sm-10">
-            @Model.City?.CityName
+            @Html.DisplayFor(model => model.City.CityName)
         </dd>
 
         <dt class="col-sm-2">

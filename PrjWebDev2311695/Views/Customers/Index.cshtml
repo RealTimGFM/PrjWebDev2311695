@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.AddressLine)
             </th>
             <th>
-                City
+                @Html.DisplayNameFor(model => model.City)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PostalCode)
@@ -50,7 +50,7 @@
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @item.Email
+                    @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AddressLine)
