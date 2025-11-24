@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using PrjWebDev2311695.Data;
+using PrjWebDev2311695.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PrjWebDev2311695.Data;
-using PrjWebDev2311695.Models;
 
 namespace PrjWebDev2311695.Controllers
 {
@@ -153,51 +155,63 @@ namespace PrjWebDev2311695.Controllers
         {
             return _context.City.Any(e => e.CityId == id);
         }
-
-        public async Task<IActionResult> Search(string? city, string? province)
+        [HttpGet]
+        public IActionResult Search()
         {
-            // Retrieve all cities from the database
-            var all = await _context.City.ToListAsync();
-            string c = (city ?? "").ToLower();
-            string p = (province ?? "").ToLower();
-            List<City> result = new List<City>();
-
-            foreach (var item in all)
-            {
-                string name = (item.CityName ?? "").ToLower();
-                string prov = (item.Province ?? "").ToLower();
-
-                bool match = true;
-                //if the city box is empty, check stuff inside province box to see matches
-                //and reverse
-                //if both boxes have stuff, check both for matches city and provice
-                if (c != "")
-                {
-                    if (!name.Contains(c))
-                    {
-                        match = false;
-                    }
-                }
-
-                if (p != "")
-                {
-                    if (!prov.Contains(p))
-                    {
-                        match = false;
-                    }
-                }
-
-                if (match)
-                {
-                    result.Add(item);
-                }
-            }
-            //keep track of what savved where. 
-            ViewBag.City = city;
-            ViewBag.Province = province;
-
-            return View(result);
+            // render the blank form
+            return View(new City());
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search([Bind("CityId,CityName,Province")] City city)
+        {
+            List<City> found = new List<City>();
+            //check both
+            if (!string.IsNullOrWhiteSpace(city.CityName) && !string.IsNullOrWhiteSpace(city.Province))
+            {
+                found = await _context.City
+                    .Where(c => c.CityName.Contains(city.CityName) && c.Province.Contains(city.Province))
+                    .ToListAsync();
+            }
+            //check name 
+            else if (!string.IsNullOrWhiteSpace(city.CityName))
+            {
+                found = await _context.City
+                    .Where(c => c.CityName.Contains(city.CityName))
+                    .ToListAsync();
+            }
+            //check provincee
+            else if (!string.IsNullOrWhiteSpace(city.Province))
+            {
+                found = await _context.City
+                    .Where(c => c.Province.Contains(city.Province))
+                    .ToListAsync();
+            }
+            //simply return nothing 
+            else
+            {
+                Console.WriteLine("NOT AN ERROR, ITS JUST EMPTY");
+                found = new List<City>();
+            }
 
+            TempData["CityResults"] = JsonConvert.SerializeObject(found);
+            return RedirectToAction(nameof(SearchResults));
+        }
+        public IActionResult SearchResults()
+        {
+            string resultsJ = TempData["CityResults"] as string ?? "[]";
+            var results = JsonConvert.DeserializeObject<List<City>>(resultsJ);
+
+            if (results.Count > 0)
+            {
+                ViewBag.SearchResultsMessage = $"Found {results.Count} item(s) matching your search.";
+            }
+            else
+            {
+                ViewBag.SearchResultsMessage = "No results found.";
+            }
+
+            return View(results);
+        }
     }
 }

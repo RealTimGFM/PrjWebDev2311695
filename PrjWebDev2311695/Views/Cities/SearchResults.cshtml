@@ -1,0 +1,35 @@
+﻿@model List<PrjWebDev2311695.Models.City>
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h1>Search Results</h1>
+<h4>City Search</h4>
+<hr />
+
+<div>
+    <a asp-action="Search">Back to Search</a>
+</div>
+
+<span>@ViewBag.SearchResultsMessage</span>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Province</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.CityName</td>
+                    <td>@c.Province</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

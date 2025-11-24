@@ -50,15 +50,9 @@ namespace PrjWebDev2311695.Controllers
         public IActionResult Create()
         {
             ViewData["CustomerId"] = new SelectList(_context.Customer
-                    .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
-                    .OrderBy(c => c.FullName),
-                "CustomerId", "FullName"
-            );
-            ViewData["ProductId"] = new SelectList(
-                _context.Product
-                    .OrderBy(p => p.Description),
-                "ProductId", "Description"
-            );
+                .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
+                .OrderBy(x => x.FullName), "CustomerId", "FullName");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
             return View();
         }
 
@@ -75,16 +69,10 @@ namespace PrjWebDev2311695.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(
-                _context.Customer
-                    .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
-                    .OrderBy(c => c.FullName),
-                "CustomerId", "FullName", sale.CustomerId
-            );
-            ViewData["ProductId"] = new SelectList(
-                _context.Product.OrderBy(p => p.Description),
-                "ProductId", "Description", sale.ProductId
-            );
+            ViewData["CustomerId"] = new SelectList(_context.Customer
+                .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
+                .OrderBy(x => x.FullName), "CustomerId", "FullName", sale.CustomerId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", sale.ProductId);
             return View(sale);
         }
 
@@ -101,16 +89,10 @@ namespace PrjWebDev2311695.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(
-                _context.Customer
-                    .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
-                    .OrderBy(c => c.FullName),
-                "CustomerId", "FullName", sale.CustomerId
-            );
-            ViewData["ProductId"] = new SelectList(
-                _context.Product.OrderBy(p => p.Description),
-                "ProductId", "Description", sale.ProductId
-            );
+            ViewData["CustomerId"] = new SelectList(_context.Customer
+                .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
+                .OrderBy(x => x.FullName), "CustomerId", "FullName", sale.CustomerId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", sale.ProductId);
             return View(sale);
         }
 
@@ -146,16 +128,10 @@ namespace PrjWebDev2311695.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(
-                _context.Customer
-                    .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
-                    .OrderBy(c => c.FullName),
-                "CustomerId", "FullName", sale.CustomerId
-            );
-            ViewData["ProductId"] = new SelectList(
-                _context.Product.OrderBy(p => p.Description),
-                "ProductId", "Description", sale.ProductId
-            );
+            ViewData["CustomerId"] = new SelectList(_context.Customer
+                .Select(c => new { c.CustomerId, FullName = c.FirstName + " " + c.LastName })
+                .OrderBy(x => x.FullName), "CustomerId", "FullName", sale.CustomerId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", sale.ProductId);
             return View(sale);
         }
 
